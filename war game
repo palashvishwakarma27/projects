@@ -1,0 +1,58 @@
+import random
+
+# Define a simple Card class
+class Card:
+    suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
+    ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace']
+
+    def __init__(self, suit, rank):
+        self.suit = suit
+        self.rank = rank
+        self.value = Card.ranks.index(rank) + 2  # Value is based on rank
+
+    def __str__(self):
+        return f"{self.rank} of {self.suit}"
+
+# Define a Deck class
+class Deck:
+    def __init__(self):
+        self.cards = [Card(suit, rank) for suit in Card.suits for rank in Card.ranks]
+        random.shuffle(self.cards)
+
+    def draw_card(self):
+        return self.cards.pop() if self.cards else None
+
+# Define the War game logic
+def war_game():
+    deck = Deck()
+    player1_deck = deck.cards[:26]
+    player2_deck = deck.cards[26:]
+
+    rounds = 0
+    while player1_deck and player2_deck:
+        rounds += 1
+        print(f"\nRound {rounds}:\n")
+
+        player1_card = player1_deck.pop(0)
+        player2_card = player2_deck.pop(0)
+
+        print(f"Player 1 draws: {player1_card}")
+        print(f"Player 2 draws: {player2_card}")
+
+        if player1_card.value > player2_card.value:
+            player1_deck += [player1_card, player2_card]
+            print("Player 1 wins this round!")
+        elif player1_card.value < player2_card.value:
+            player2_deck += [player1_card, player2_card]
+            print("Player 2 wins this round!")
+        else:
+            print("It's a tie! Each player keeps their card.")
+
+    # Determine the winner
+    if player1_deck:
+        print("\nPlayer 1 wins the game!")
+    else:
+        print("\nPlayer 2 wins the game!")
+
+if __name__ == "__main__":
+    war_game()
